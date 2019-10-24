@@ -2,8 +2,8 @@
 // Created by Zilin Xiao on 2019/10/24.
 //
 
-#ifndef CPP_TOYS_SHARED_PTR_H
-#define CPP_TOYS_SHARED_PTR_H
+#ifndef CPP_TOYS_SHARED_PTR_TEST_H
+#define CPP_TOYS_SHARED_PTR_TEST_H
 
 #include <cstddef> // for size_t
 #include <utility> // for swap
@@ -44,7 +44,7 @@ namespace myToys{
             return objPtr == nullptr;
         }
     public:
-        shared_ptr():objPtr(nullptr), ctrlPtr(nullptr){}
+        shared_ptr(): objPtr(nullptr), ctrlPtr(nullptr){}
         ~shared_ptr(){
             reset();
         }
@@ -56,7 +56,9 @@ namespace myToys{
         void reset(T *newPtr){
             reset();
             if(newPtr != nullptr){
-                this = new shared_ptr(newPtr);
+                auto tmp = new shared_ptr(newPtr);
+                objPtr = tmp->objPtr;
+                ctrlPtr = tmp->ctrlPtr;
             }
         }
 
@@ -120,4 +122,4 @@ namespace myToys{
     };
 }
 
-#endif //CPP_TOYS_SHARED_PTR_H
+#endif //CPP_TOYS_SHARED_PTR_TEST_H

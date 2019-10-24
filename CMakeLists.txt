@@ -4,4 +4,4 @@ project(Cpp-Toys)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Cpp-Toys shared_ptr/shared_ptr.cpp shared_ptr/shared_ptr.h)
+add_executable(Cpp-Toys shared_ptr/shared_ptr_test.cpp shared_ptr/shared_ptr_test.h)

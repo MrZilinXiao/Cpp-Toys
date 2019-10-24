@@ -2,6 +2,8 @@
 // Created by Zilin Xiao on 2019/10/24.
 //
 
+// STL shared_ptr 测试 来自https://zh.cppreference.com/w/cpp/memory/shared_ptr
+
 #include <iostream>
 #include <memory>
 #include <thread>
