@@ -1,3 +1,7 @@
+cmake-build-debug/*
+CMakeFiles
+build
+.idea
 # Prerequisites
 *.d
 
@@ -30,3 +34,34 @@
 *.exe
 *.out
 *.app
+
+# macOS trash
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.vscode
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+*.make
