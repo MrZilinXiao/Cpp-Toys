@@ -18,7 +18,7 @@ namespace myToys{
         size_t getCnt(){
             return refCnt;
         };
-        void dropCnt(){ // Q: 线程安全的 How to do?
+        void dropCnt(){ // Q: 线程安全的 How to do? 加锁
             if(refCnt > 0) refCnt -= 1;
         }
         void raiseCnt(){
@@ -112,14 +112,27 @@ namespace myToys{
             return get();
         }
 
-        T *operator*() const{
+        T &operator*() const{
             return *get();
         }
 
-        T &operator[](size_t ind) const{
-            return (get() + ind);
+        T &operator[](size_t ind){
+            return *(get() + ind);
+        }
+        explicit operator bool() const{
+            return get() != nullptr;
+        }
+        bool owner_before(const shared_ptr<T> & other){
+            //true if the object is considered to be different from x and go before it in a strict weak order based on ownership.
+            //false otherwise.
+            //return this < &other;
         }
     };
+    template <typename T, typename... ArgsT>
+    shared_ptr<T> make_shared(ArgsT &&... args){
+        return shared_ptr<T>(new T(std::forward<ArgsT>(args)...));
+    }
+
 }
 
 #endif //CPP_TOYS_SHARED_PTR_TEST_H
