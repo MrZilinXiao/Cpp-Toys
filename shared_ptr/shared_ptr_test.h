@@ -106,7 +106,7 @@ namespace myToys{
             return use_count() == 1;
         }
 
-        // Operators overload are as following
+        // Operators overloads are as following
 
         T *operator->() const{
             return get();

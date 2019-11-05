@@ -41,7 +41,7 @@ int main(){
 
     cout<<"Global Count = "<<*globalCnt<<endl;
 
-//    auto *ptr = new int[100];
+    auto ptr = new int[100];
 //    myToys::shared_ptr<int> intsp1(ptr);
 //    cout<<intsp1[10]<<endl;
     myToys::shared_ptr<Base> sp1(new Base(1));
