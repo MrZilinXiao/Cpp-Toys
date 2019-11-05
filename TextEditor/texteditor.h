@@ -217,9 +217,9 @@ Status LineEditor::ChangeLine() {
     if(index == std::string::npos){
         return FAILED;
     }else {
-        std::string newLine = oldStr.substr(0, index);
+        std::string newLine = curLine.substr(0, index);
         newLine += newStr;
-        newLine += oldStr.substr(index + newStr.size()); // 直接截取到最后
+        newLine += curLine.substr(index + oldStr.size()); // 直接截取到最后
         listOperation::SetElem(textBuffer, curLineNo, newLine);
         return SUCCESS;
     }
@@ -284,9 +284,9 @@ void LineEditor::Run() {
         }else{
             std::cout<<"文本缓存区为空"<<std::endl<<"?";
         }
+        while(std::cin.get()!='\n');
         userCommand = interact::GetChar();
         userCommand = std::tolower(userCommand);
-        while(std::cin.get()!='\n');
 
         if(userCommand != keymap::undo && userCommand != keymap::help1 && userCommand != keymap::help2
         && userCommand != keymap::view){ // 无需记录缓存的几个命令
