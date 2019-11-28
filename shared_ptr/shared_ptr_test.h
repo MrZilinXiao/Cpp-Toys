@@ -11,14 +11,16 @@
 namespace myToys{
     class _ControlBlock{
     protected:
-        size_t refCnt = 0;
+        size_t refCnt = 0;  // 唯一会导致线程不安全的因素
     public:
         _ControlBlock(size_t sz):refCnt(sz){}
         ~_ControlBlock(){}
         size_t getCnt(){
             return refCnt;
         };
-        void dropCnt(){ // Q: 线程安全的 How to do? 加锁
+        void dropCnt(){ // Q: 线程安全的 How to do?
+            // 加锁？原子量？ Lock atomic
+
             if(refCnt > 0) refCnt -= 1;
         }
         void raiseCnt(){
@@ -27,9 +29,9 @@ namespace myToys{
     };
 
     template <class T>
-    class shared_ptr{
+    class shared_ptr final{ // 有final 析构函数可以不加virtual
     protected:
-        T *objPtr;
+        T *objPtr = nullptr;
         _ControlBlock *ctrlPtr;
         void clear(){
             ctrlPtr->dropCnt();
@@ -48,7 +50,7 @@ namespace myToys{
         ~shared_ptr(){
             reset();
         }
-        void reset(){
+        void reset() noexcept { // noexcept 标志不会有异常
             if(objPtr != nullptr){
                 clear();
             }
@@ -66,6 +68,7 @@ namespace myToys{
             std::swap(objPtr, ptr.objPtr);
         }
         explicit shared_ptr(T *t){ // 指向Obj，前提是没有其他shared_ptr指向Obj
+            // explicit  避免隐式转换
             if(t != nullptr){
                 objPtr = t;
                 ctrlPtr = new _ControlBlock(1);
@@ -119,7 +122,7 @@ namespace myToys{
         T &operator[](size_t ind){
             return *(get() + ind);
         }
-        explicit operator bool() const{
+        explicit operator bool() const{ // usage: if(XXX) 可直接用于bool判断条件
             return get() != nullptr;
         }
         bool owner_before(const shared_ptr<T> & other){

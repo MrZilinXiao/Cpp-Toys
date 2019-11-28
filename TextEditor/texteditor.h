@@ -148,7 +148,7 @@ LineEditor::LineEditor(std::string inFileName, std::string outFileName) {
 }
 
 void LineEditor::ReadFile() {
-    bool proceed = true;
+    bool proceed;
     if(!textBuffer.empty()) {
         std::cout << "缓存区不为空！继续将清空缓存区！" << std::endl;
         std::cout << "确认吗？" << std::endl;
