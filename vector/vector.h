@@ -35,34 +35,32 @@ namespace mytoys{
         }
 
         vector_iter&operator++(){ // ++iter
-            _v = _v + sizeof(value_type);
+            _v = _v + 1;
             return *this;
         }
 
         vector_iter&operator--(int){ // iter--
-            _v = _v - sizeof(value_type);
+            _v = _v - 1;
             return *this;
         }
 
-        vector_iter&operator++(int){ // iter++
+        vector_iter operator++(int){ // iter++
             auto tmp = _v;
-            _v = _v + sizeof(value_type);
-            return iterator_base(tmp);
+            _v = _v + 1;
+            return iterator_base(tmp); // tmp -- pointer
         }
 
-        bool operator==(const iterator_base& rhs) const noexcept {
-            return (*_v) == (*rhs);
+        bool operator==(const iterator_base& rhs) const noexcept { // judging if same address, not same value
+            return _v == rhs._v;
         }
 
         bool operator!=(const iterator_base& rhs) const noexcept {
-            return (*_v) != (*rhs);
+            return _v != rhs._v;
         }
 
         //private:
         pointer _v; // a pointer
-        explicit vector_iter(const pointer* v):_v(v){
-
-        }
+        explicit vector_iter(const pointer& v):_v(v){}
 
 
     };
@@ -171,6 +169,7 @@ namespace mytoys{
         void clear() noexcept { // 请保持capacity不变
             delete []_ele;
             _ele = new value_type[_max_sz];
+            _sz = 0;
         }
 
         iterator insert(iterator pos, const value_type& value){ // Insert in the front of pos
@@ -178,9 +177,10 @@ namespace mytoys{
                 reallocate(_max_sz + _step);
             }
             for(auto it = end(); it != pos; it--){
-                *it = *(it._v - sizeof(value_type));
+                *it = *(it._v - 1);
             }
             *pos = value; // value -- ref type   *pos -- ref type
+            _sz += 1;
             return pos;
         }
 
@@ -189,6 +189,7 @@ namespace mytoys{
                 reallocate(_max_sz + _step);
             }
             _ele[_sz] = value;
+            _sz += 1;
             return make_iter(&_ele[_sz]);
         }
 
@@ -222,7 +223,7 @@ namespace mytoys{
             }
             delete []_ele;
             _ele = new_ele;
-            std::cout<<"Inflate a vector, from "<<_max_sz<<" to "<<new_max_sz<<std::endl;
+            std::cout<<"Inflate a vector, from size "<<_max_sz<<" to size "<<new_max_sz<<std::endl;
             _max_sz = new_max_sz;
         }
     };

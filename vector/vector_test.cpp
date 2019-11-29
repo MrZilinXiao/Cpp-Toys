@@ -11,7 +11,6 @@ int main(){
         v.push_back(i);
     }
     for(auto it = v.begin(); it != v.end(); it++){
-        std::cout<<*it<<" ";
+        std::cout<<*it<<std::endl;
     }
-    std::cout<<std::endl;
 }
