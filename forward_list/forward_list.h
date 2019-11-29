@@ -18,8 +18,8 @@ namespace mytoys{
             next = _next;
         }
 
-        friend class forward_list<T, std::allocator<T> >;
-    private:
+        // friend class forward_list<T, std::allocator<T> >;
+    // private:
         T ele;
         forward_list_node<T>* next;
     };
@@ -71,7 +71,7 @@ namespace mytoys{
         }
 
 
-    private:
+    // private:
         link_type _p;  // pointer
         explicit forward_list_iter(const link_type&p): _p(p){
 
@@ -125,17 +125,19 @@ namespace mytoys{
         }
 
         iterator begin(){
+            if(_sz != 0) return make_iter(_head->next);
             return make_iter(_head);
         }
         const_iterator cbegin(){
-            return make_iter(const_cast<node_pointer>( _head));
+            if(_sz != 0) return make_iter(const_cast<node_pointer>(_head->next));
+            return make_iter(const_cast<node_pointer>(_head));
         }
 
         iterator end(){
-            return make_iter(_tail);
+            return make_iter(_tail->next);
         }
         const_iterator cend(){
-            return make_iter(const_cast<node_pointer>( _tail));
+            return make_iter(const_cast<node_pointer>( _tail->next));
         }
 
         value_type front() const noexcept {
@@ -161,10 +163,10 @@ namespace mytoys{
 
         iterator insert_after(const_iterator pos, const T& value){
             auto tmp = new listNode(value, (pos._p)->next);
-            if(pos._p->next == nullptr){ // if inserted into last position, change the tail
+            if(pos._p->next == nullptr){ // if inserted into the last position, change the tail
                 _tail = tmp;
             }
-            pos._p->next = tmp;
+            (pos._p)->next = tmp;
             _sz += 1;
             return make_iter(tmp);
         }
@@ -187,15 +189,26 @@ namespace mytoys{
         }
 
         void push_front(const T& value){
-            insert_after(cbegin(), value);
+            // insert_after(cbegin(), value);
+            auto tmp = new listNode(value, _head->next);
+            if(_head->next == nullptr){ // if inserted into the last position, change the tail
+                _tail = tmp;
+            }
+            _head->next = tmp;
+            _sz += 1;
         }
 
 
         void reverse() noexcept{
             if(_sz != 0){
-                auto prev = nullptr, curr = _head->next, next = _head->next->next;
+                _tail = _head->next;
+                auto prev = _head, curr = _head->next, next = _head->next->next;
                 while(next != nullptr){
-                    curr->next = prev;
+                    if(prev == _head){
+                        curr->next = nullptr;
+                    }else {
+                        curr->next = prev;
+                    }
                     prev = curr;
                     curr = next;
                     next = next->next;
@@ -206,7 +219,7 @@ namespace mytoys{
         }
 
 
-    private:
+    //private:
         size_type _sz;
         alloc_type _alloc;
         node_pointer _head;
